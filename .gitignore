@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+
+the_wildfire_dataset_2n_version/
+*.h5
+*.keras
+*.weights.h5
+
+*.pyc
+*.pyo
+*.pyd
