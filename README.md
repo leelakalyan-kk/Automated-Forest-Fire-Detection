@@ -47,8 +47,22 @@ Automated-Forest-Fire-Detection/
 ```
 
 **Where to get the models:**
-- If you have the original training notebooks, regenerate them
-- Or contact the project maintainer for model download links
+- Run the training notebook `Try this.ipynb` to automatically generate and save all models
+- The notebook trains three models and **automatically saves them** in both `.h5` and `.keras` formats
+- Or contact the project maintainer for pre-trained model download links
+
+**Training the Models Automatically:**
+To generate the trained models yourself, run the Jupyter notebook:
+```bash
+jupyter notebook Try this.ipynb
+```
+The notebook will:
+1. Load the wildfire dataset from `the_wildfire_dataset_2n_version/`
+2. Train three models (Baseline CNN, ResNet50, InceptionV3)
+3. **Automatically save the trained models** to the project root:
+   - `building_model.keras` / `building_model.h5`
+   - `resnet50_forest_fire_detection_model.keras` / `resnet50_forest_fire_detection_model.h5`
+   - `inceptionv3_forest_fire_detection_model.keras` / `inceptionv3_forest_fire_detection_model.h5`
 
 ### 4. Run the App
 ```bash
