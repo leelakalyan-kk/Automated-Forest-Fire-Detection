@@ -100,3 +100,35 @@ Then open `http://localhost:8501` in your browser.
 - Pillow
 - NumPy
 - Matplotlib
+
+## Deploy on Render
+
+This project can be deployed on Render as a Streamlit web service.
+
+### Important
+- The app still needs the trained model files (`building_model.keras`, `resnet50_forest_fire_detection_model.keras`, `inceptionv3_forest_fire_detection_model.keras`) at runtime.
+- If those files are not present in the Render instance, the app will show a model-not-found error.
+
+### Automatic model download on Render
+The app can download model files at startup if you provide direct file URLs as environment variables:
+- `BUILDING_MODEL_URL`
+- `RESNET50_MODEL_URL`
+- `INCEPTIONV3_MODEL_URL`
+
+Each URL must point directly to a downloadable `.keras` file.
+
+### Render setup
+1. Push this repository to GitHub.
+2. Sign in to Render and create a new **Web Service**.
+3. Connect the GitHub repository.
+4. Use the included `render.yaml` or set these manually:
+   - **Build Command:** `pip install -r requirements.txt`
+   - **Start Command:** `streamlit run app.py --server.address 0.0.0.0 --server.port $PORT`
+5. Add the environment variables for the model URLs in Render.
+6. The app will download the models automatically the first time it starts.
+
+### If you want the app to run automatically on Render
+You must provide the model files through one of these options:
+- Upload them into the repo if they are under the GitHub size limit
+- Store them in cloud storage and download them at startup
+- Use Git LFS for the model artifacts

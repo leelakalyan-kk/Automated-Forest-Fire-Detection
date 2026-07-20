@@ -5,6 +5,7 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import os
 import base64
+from urllib.request import urlretrieve
 
 # -------------------------------------------------------
 # PAGE CONFIG
@@ -19,6 +20,23 @@ IMG_SIZE = (160, 160)
 CLASS_NAMES = ["Fire", "No Fire"]
 
 
+def ensure_model_file(model_path, model_url_env_var):
+    if os.path.exists(model_path):
+        return model_path
+
+    model_url = os.getenv(model_url_env_var, "").strip()
+    if not model_url:
+        return None
+
+    try:
+        st.info(f"Downloading model for {os.path.basename(model_path)}...")
+        urlretrieve(model_url, model_path)
+        return model_path
+    except Exception as error:
+        st.error(f"❌ Failed to download {model_path}: {error}")
+        return None
+
+
 # -------------------------------------------------------
 # LOAD MODEL (USING H5 FILES)
 # -------------------------------------------------------
@@ -31,10 +49,23 @@ def load_selected_model(model_name):
         "InceptionV3 (Transfer Learning)": "inceptionv3_forest_fire_detection_model.keras"
     }
 
+    model_urls = {
+        "Baseline CNN (Building Model)": "BUILDING_MODEL_URL",
+        "ResNet50 (Transfer Learning)": "RESNET50_MODEL_URL",
+        "InceptionV3 (Transfer Learning)": "INCEPTIONV3_MODEL_URL"
+    }
+
     model_path = model_paths.get(model_name)
+    model_url_env_var = model_urls.get(model_name)
+
+    if model_path and model_url_env_var:
+        model_path = ensure_model_file(model_path, model_url_env_var)
 
     if not model_path or not os.path.exists(model_path):
-        st.error(f"❌ Model file not found: {model_path}")
+        st.error(
+            f"❌ Model file not found: {model_path}. "
+            f"Set the matching environment variable ({model_url_env_var}) to a direct download URL."
+        )
         st.stop()
 
     try:
